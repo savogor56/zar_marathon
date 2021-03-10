@@ -1,25 +1,17 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Header } from './components/Header/Header';
+import { Layout } from './components/Layout/Layout';
+import { Footer } from './components/Footer/Footer';
+import bgImage from './assets/bg1.jpg'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <>
+      <Header title="This is title" descr="This is Description!" />
+      <Layout title="Title 1" descr="descr 1" urlBg={bgImage} />
+      <Layout title="Title 2" descr="descr 2" colorBg="red" />
+      <Layout title="Title 3" descr="descr 3" urlBg={bgImage} />
+      <Footer />
+    </>
   );
 }
 
