@@ -3,12 +3,11 @@ import classes from './style.module.css'
 
 interface Props {
   title: string
-  descr: string
   urlBg?: string
   colorBg?: string
 }
 
-export const Layout: React.FC<Props> = ({title, descr, urlBg, colorBg}) => {
+export const Layout: React.FC<Props> = ({title, children, urlBg, colorBg}) => {
   const layoutStyles: CSSProperties = {}
 
   if (urlBg) layoutStyles.background = `url(${urlBg})`
@@ -23,7 +22,7 @@ export const Layout: React.FC<Props> = ({title, descr, urlBg, colorBg}) => {
                   <span className={classes.separator}></span>
               </div>
               <div className={`${classes.desc} ${classes.full}`}>
-                  <p>{descr}</p>
+                  <p>{children}</p>
               </div>
           </article>
       </div>
