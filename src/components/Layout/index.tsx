@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react'
 import classes from './style.module.css'
 
 interface Props {
@@ -8,8 +9,11 @@ interface Props {
 }
 
 export const Layout: React.FC<Props> = ({title, descr, urlBg, colorBg}) => {
-  const layoutStyles = {background: urlBg ? `url(${urlBg})` : colorBg}
-  
+  const layoutStyles: CSSProperties = {}
+
+  if (urlBg) layoutStyles.background = `url(${urlBg})`
+  if (colorBg) layoutStyles.backgroundColor = colorBg  
+
   return (
     <section className={classes.root} style={layoutStyles}>
       <div className={classes.wrapper}>
