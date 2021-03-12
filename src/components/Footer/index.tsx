@@ -1,4 +1,4 @@
-import classes from "./style.module.css"
+import classes from './style.module.css'
 
 
 export const Footer = () => {

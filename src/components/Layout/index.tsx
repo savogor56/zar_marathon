@@ -1,4 +1,3 @@
-import { CSSProperties } from 'react'
 import classes from './style.module.css'
 
 interface Props {
@@ -9,14 +8,10 @@ interface Props {
 }
 
 export const Layout: React.FC<Props> = ({title, descr, urlBg, colorBg}) => {
-  const styles: CSSProperties = {}
-  
-  if (urlBg) styles.background = `url(${urlBg})`
-  
-  if(colorBg) styles.backgroundColor = colorBg
+  const layoutStyles = {background: urlBg ? `url(${urlBg})` : colorBg}
   
   return (
-    <section className={classes.root} style={styles}>
+    <section className={classes.root} style={layoutStyles}>
       <div className={classes.wrapper}>
           <article>
               <div className={classes.title}>
