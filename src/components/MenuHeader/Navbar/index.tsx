@@ -2,28 +2,31 @@ import classes from './style.module.css'
 import cn from 'classnames'
 
 interface Props {
-  toggleOpen: (isOpen: boolean) => void
-  isOpen: boolean
+  toggleOpen: () => void
+  isOpen: boolean | null
+  bgActive?: boolean
 }
 
-export const Navbar:React.FC<Props> = ({toggleOpen, isOpen}) => {
+export const Navbar:React.FC<Props> = ({toggleOpen, isOpen, bgActive}) => {
   const handleClick = () => {
-    toggleOpen && toggleOpen(isOpen)
+    toggleOpen()
   }
 
   return (
-    <nav className={classes.root}>
+    <nav className={cn(classes.root, classes.navbar,
+      {[classes.bgActive]: bgActive}
+    )}>
       <div className={classes.navWrapper}>
         <p className={classes.brand}>
           LOGO
         </p>
-        <a 
-          href="/#" 
+         {/*eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
+        <div
           className={cn(classes.menuButton, {[classes.active]: isOpen})} 
           onClick={handleClick}
         >
           <span />
-        </a>
+        </div>
       </div>
     </nav>
   )

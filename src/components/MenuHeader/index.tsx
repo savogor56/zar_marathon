@@ -2,16 +2,20 @@ import React, { useState } from 'react'
 import { Menu } from './Menu'
 import { Navbar } from './Navbar'
 
-export const MenuHeader = () => {
-  const [isOpen, setOpen] = useState(false)
+interface Props {
+  bgActive?: boolean
+}
+
+export const MenuHeader:React.FC<Props> = ({ bgActive }) => {
+  const [isOpen, setOpen] = useState<boolean | null>(null)
   
-  const handleMenuOpen = (isOpen: boolean) => {
-    setOpen(!isOpen)
+  const handleMenuOpen = () => {
+    setOpen(prevState => !prevState)
   }
 
   return (
     <>
-      <Navbar toggleOpen={handleMenuOpen} isOpen={isOpen} />
+      <Navbar toggleOpen={handleMenuOpen} isOpen={isOpen} bgActive={bgActive} />
       <Menu isOpen={isOpen} /> 
     </>
   )

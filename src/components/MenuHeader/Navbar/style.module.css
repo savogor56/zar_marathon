@@ -81,7 +81,7 @@
 }
 
 @media only screen and (max-width: 849px) {
-  #navbar {
+  .navbar {
     background: #181d23aa;
   }
 }
