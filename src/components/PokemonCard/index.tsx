@@ -10,13 +10,14 @@ interface Props {
   type: string
   img: string
   name: string
+  isActive: boolean
+  changeActive: (id: number, isActive: boolean) => void
 }
 
-export const PokemonCard: React.FC<Props> = ({name, img, id, type, values }) => {
-  const [isActive, setActive] = useState(false)
+export const PokemonCard: React.FC<Props> = ({name, img, id, type, values, isActive, changeActive }) => {
   
   const handleClick = () => {
-    setActive(!isActive)
+    changeActive(id, isActive)
   }
 
   return (

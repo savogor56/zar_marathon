@@ -6,3 +6,10 @@
   background-color: violet;
   margin: 10% 25%;
 }
+
+.flex {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
