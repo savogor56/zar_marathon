@@ -88,3 +88,12 @@
   color: #fafafa;
   line-height: 32px;
 }
+
+.btn {
+  padding: 10px;
+  border: 2px solid violet;
+  border-radius: 6px;
+  width: 50%;
+  background-color: violet;
+  margin: 0 25%;
+}

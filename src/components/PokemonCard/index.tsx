@@ -1,7 +1,8 @@
 import classes from './style.module.css'
-import { PokemonValues } from './../../utils/types';
+import { PokemonValues } from './../../utils/types'
 import cardBackSide from './assets/card-back-side.jpg'
-import { useState } from 'react';
+import { useState } from 'react'
+import cn from 'classnames'
 
 interface Props {
   id: number
@@ -20,21 +21,21 @@ export const PokemonCard: React.FC<Props> = ({name, img, id, type, values }) => 
 
   return (
     <div className={classes.root} onClick={handleClick}>
-      <div className={`${classes.pokemonCard} ${isActive && classes.active}`}>
+      <div className={cn(classes.pokemonCard, {[classes.active]: isActive })}>
         <div className={classes.cardFront}>
-            <div className={`${classes.wrap} ${classes.front}`}>
-                <div className={`${classes.pokemon} ${classes[type]}`}>
+            <div className={cn(classes.wrap, classes.front)}>
+                <div className={cn(classes.pokemon, classes[type])}>
                     <div className={classes.values}>
-                        <div className={`${classes.count} ${classes.top}`}>
+                        <div className={cn(classes.count, classes.top)}>
                           {values.top}
                         </div>
-                        <div className={`${classes.count} ${classes.right}`}>
+                        <div className={cn(classes.count, classes.right)}>
                           {values.right}
                         </div>
-                        <div className={`${classes.count} ${classes.bottom}`}>
+                        <div className={cn(classes.count, classes.bottom)}>
                           {values.bottom}
                         </div>
-                        <div className={`${classes.count} ${classes.left}`}>
+                        <div className={cn(classes.count, classes.left)}>
                           {values.left}
                         </div>
                     </div>
@@ -53,7 +54,7 @@ export const PokemonCard: React.FC<Props> = ({name, img, id, type, values }) => 
         </div>
 
         <div className={classes.cardBack}>
-            <div className={`${classes.wrap} ${classes.back}`}>
+            <div className={cn(classes.wrap, classes.back)}>
                 <img src={cardBackSide} alt="Сard Backed" />
             </div>
         </div>

@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react'
 import classes from './style.module.css'
+import cn from 'classnames'
 
 interface Props {
   title: string
@@ -21,7 +22,7 @@ export const Layout: React.FC<Props> = ({title, children, urlBg, colorBg}) => {
                   <h3>{title}</h3>
                   <span className={classes.separator}></span>
               </div>
-              <div className={`${classes.desc} ${classes.full}`}>
+              <div className={cn(classes.desc, classes.full)}>
                   <p>{children}</p>
               </div>
           </article>
