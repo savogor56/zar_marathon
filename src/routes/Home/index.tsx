@@ -1,36 +1,11 @@
-import { useState } from 'react'
-
 import { Footer } from '../../components/Footer'
 import { Header } from '../../components/Header'
 import { Layout } from '../../components/Layout'
-import { PokemonCard } from '../../components/PokemonCard'
 
-import { Pokemon } from '../../utils/types'
-
-import classes from './style.module.css'
 import bgImage from '../../assets/bg1.jpg'
 
-interface Props {
-  pokemons: Array<Pokemon>
-}
 
-export const HomePage: React.FC<Props> = ({ pokemons }) => {
-  const [cards, setCards] = useState(pokemons)
- 
-  const handleActive = (id: number, isActive: boolean) => {
-    setCards((prevState: Pokemon[]) => (
-      [...prevState.map(item => {
-        if (item.id === id) {
-          return {
-            ...item,
-            isActive: !isActive
-          }            
-        }
-        return item
-      })
-      ]
-    ))      
-}
+export const HomePage = () => {
 
   return (
     <>
@@ -40,24 +15,6 @@ export const HomePage: React.FC<Props> = ({ pokemons }) => {
           In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid.
         </p>
         <p>Each player has five cards in a hand and the aim is to capture the opponent's cards by turning them into the player's own color of red or blue.</p>
-      </Layout>
-      <Layout title="Cards" urlBg={bgImage}>
-        <div className={classes.flex}>
-          {
-            cards.map((item: Pokemon ) => (
-              <PokemonCard
-                key={item.id} 
-                name={item.name}
-                img={item.img}
-                id={item.id}
-                type={item.type}
-                values={item.values}
-                isActive={item.isActive === true}
-                changeActive={handleActive}
-              />
-            ))
-          }
-        </div>
       </Layout>
       <Layout title="Full Rules" colorBg="red">
         <p>

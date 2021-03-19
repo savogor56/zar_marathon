@@ -4,11 +4,11 @@ import cn from 'classnames'
 import { MenuHeader } from "./components/MenuHeader"
 import { GamePage } from "./routes/Game"
 import { HomePage } from "./routes/Home"
-
 import { Footer } from "./components/Footer"
 import { AboutPage } from "./routes/About"
 import { ContactPage } from "./routes/Contact"
 import { NotFound } from "./routes/NotFound"
+
 import { Pokemon } from "./utils/types"
 
 import classes from './style.module.css'
@@ -164,7 +164,7 @@ const App = () => {
               )}>
               <Switch>
                 <Route exact path="/">
-                  <HomePage pokemons={POKEMONS} />
+                  <HomePage />
                 </Route>
                 <Route path="/game">
                   <GamePage pokemons={POKEMONS} />
