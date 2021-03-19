@@ -16,7 +16,7 @@ export const MenuHeader:React.FC<Props> = ({ bgActive }) => {
   return (
     <>
       <Navbar toggleOpen={handleMenuOpen} isOpen={isOpen} bgActive={bgActive} />
-      <Menu isOpen={isOpen} /> 
+      <Menu toggleOpen={handleMenuOpen} isOpen={isOpen} /> 
     </>
   )
 }

@@ -1,3 +1,4 @@
+import { useHistory } from 'react-router'
 import classes from './style.module.css'
 
 interface Props {
@@ -7,12 +8,16 @@ interface Props {
 }
 
 export const Header: React.FC<Props> = ({title, descr, onStartGame}) => {
+  const history = useHistory()
+
   const handleClick = () => {
-    onStartGame && onStartGame('game')
+    history.push('game')
   }
   return (
     <header className={classes.root}>
       <div className={classes.forest}></div>
+      <div className={classes.silhouette}></div>
+      <div className={classes.moon}></div>
       <div className={classes.container}>
         <h1>{title}</h1>
         <p>{descr}</p>
@@ -20,7 +25,6 @@ export const Header: React.FC<Props> = ({title, descr, onStartGame}) => {
           Start Game
         </button>
       </div>
-      
   </header>
   )
 }

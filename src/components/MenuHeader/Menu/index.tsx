@@ -1,30 +1,32 @@
 import classes from './style.module.css'
 import cn from 'classnames'
+import { Link } from 'react-router-dom'
 
 interface Props {
   isOpen: boolean | null
+  toggleOpen: () => void
 }
 
 const MENU = [
   {
     title: 'HOME',
-    path: '#welcome'
+    to: '/'
   },
   {
     title: 'GAME',
-    path: '#game'
+    to: '/game'
   },
   {
     title: 'ABOUT',
-    path: '#about'
+    to: '/about'
   },
   {
     title: 'CONTACT',
-    path: '#contact'
+    to: '/contact'
   },
 ]
 
-export const Menu:React.FC<Props> = ({isOpen}) => {
+export const Menu:React.FC<Props> = ({isOpen, toggleOpen}) => {
   return (
     <div className={cn(classes.menuContainer, 
     {[classes.active]: isOpen === true, 
@@ -34,10 +36,10 @@ export const Menu:React.FC<Props> = ({isOpen}) => {
         <ul>
           {
             MENU.map(item => (
-              <li>
-                <a href={item.path}>
+              <li onClick={toggleOpen}>
+                <Link to={item.to}>
                   {item.title}
-                </a>
+                </Link>
               </li>
             ))
           }          

@@ -24,4 +24,5 @@ export interface Pokemon {
   height: number
   id: number
   values: PokemonValues
+  isActive?: boolean
 }
