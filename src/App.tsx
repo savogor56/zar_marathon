@@ -167,7 +167,7 @@ const App = () => {
                   <HomePage />
                 </Route>
                 <Route path="/game">
-                  <GamePage pokemons={POKEMONS} />
+                  <GamePage />
                 </Route>
                 <Route path="/about">
                   <AboutPage />

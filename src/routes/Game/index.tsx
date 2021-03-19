@@ -6,10 +6,6 @@ import { PokemonCard } from '../../components/PokemonCard'
 import database from '../../services/firebase'
 import classes from './style.module.css'
 
-interface Props {
-  pokemons: Array<Pokemon>
-}
-
 const NEW_POKEMON = {
     "abilities": [
         "keen-eye",
@@ -44,7 +40,7 @@ const getPokemons = (setCards: React.Dispatch<React.SetStateAction<[string, Poke
     })
 }
 
-export const GamePage:React.FC<Props> = ({pokemons}) => {
+export const GamePage = () => {
   const [cards, setCards] = useState<[string, Pokemon][] | null>(null)
   const [changedPok, setChangedPok] = useState<[string, Pokemon] | null>(null)
   const [newPokemon, setNewPokemon] = useState<Pokemon | null>(null)
