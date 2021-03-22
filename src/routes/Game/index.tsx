@@ -78,7 +78,7 @@ export const GamePage = () => {
        }
    }, [newPokemon])
 
-  const handleActive = (id: number | string, isActive: boolean) => {
+  const handleActive = (id: number, isActive: boolean) => {
     setCards((prevState: [string, Pokemon][] | null ) => {
         if (prevState) {
             return ( [...prevState.map(item => {

@@ -4,13 +4,13 @@ import cardBackSide from './assets/card-back-side.jpg'
 import cn from 'classnames'
 
 interface Props {
-  id: number | string
+  id: number
   values: PokemonValues
   type: string
   img: string
   name: string
   isActive: boolean
-  changeActive: (id: number | string, isActive: boolean) => void
+  changeActive: (id: number, isActive: boolean) => void
 }
 
 export const PokemonCard: React.FC<Props> = ({name, img, id, type, values, isActive, changeActive }) => {
