@@ -5,6 +5,7 @@ import { PokemonCard } from '../../components/PokemonCard'
 
 import database from '../../services/firebase'
 import classes from './style.module.css'
+import {log} from "util";
 
 const NEW_POKEMON = {
     "abilities": [
@@ -43,7 +44,7 @@ const getPokemons = (setCards: React.Dispatch<React.SetStateAction<[string, Poke
 export const GamePage = () => {
   const [cards, setCards] = useState<[string, Pokemon][] | null>(null)
   const [changedPok, setChangedPok] = useState<[string, Pokemon] | null>(null)
-  const [newPokemon, setNewPokemon] = useState<Pokemon | null>(null)
+  const [newPokemon, setNewPokemon] = useState<{ Pokemon: Pokemon, key: string } | null>(null)
   const history = useHistory()
   
   const handleClick = () => {
@@ -66,16 +67,18 @@ export const GamePage = () => {
 
    useEffect(() => {
        if (newPokemon) {
-           const newKey = database.ref().child('pokemons').push().key
-           database.ref('pokemons/' + newKey).set(newPokemon)
-           getPokemons(setCards)
+           database.ref('pokemons/' + newPokemon.key).set(newPokemon.Pokemon)
+               .then(() => setCards((prevState => {
+                   if (prevState) return [...prevState, [newPokemon.key, newPokemon.Pokemon]]
+                   return [[newPokemon.key, newPokemon.Pokemon]]
+               })))
        }
        return () => {
            setNewPokemon(null)
        }
    }, [newPokemon])
 
-  const handleActive = (id: number, isActive: boolean) => {
+  const handleActive = (id: number | string, isActive: boolean) => {
     setCards((prevState: [string, Pokemon][] | null ) => {
         if (prevState) {
             return ( [...prevState.map(item => {
@@ -98,10 +101,16 @@ export const GamePage = () => {
   }
 
   const handleAddPokemon = () => {
-    setNewPokemon({
-        ...NEW_POKEMON,
-        id: Math.floor(Math.random() * 1000)
-    })
+    const newKey = database.ref().child('pokemons').push().key
+    if (newKey) {
+        setNewPokemon({
+            Pokemon: {
+                ...NEW_POKEMON,
+                id: Math.floor(Math.random() * 1000)
+            },
+            key: newKey
+        })
+    }
   }
 
   return (

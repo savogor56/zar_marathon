@@ -22,7 +22,7 @@ export interface Pokemon {
   name: string
   base_experience: number
   height: number
-  id: number
+  id: number | string
   values: PokemonValues
   isActive?: boolean
 }
