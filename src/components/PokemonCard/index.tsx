@@ -1,7 +1,6 @@
 import classes from './style.module.css'
 import { PokemonValues } from './../../utils/types'
 import cardBackSide from './assets/card-back-side.jpg'
-import { useState } from 'react'
 import cn from 'classnames'
 
 interface Props {
