@@ -1,142 +1,51 @@
-import React, {useEffect, useState} from 'react'
-import { useHistory } from 'react-router'
-import { Pokemon } from '../../utils/types'
-import { PokemonCard } from '../../components/PokemonCard'
+import {useContext, useEffect, useState} from "react"
+import {Route, Switch, useRouteMatch} from "react-router"
 
-import database from '../../services/firebase'
-import classes from './style.module.css'
-import {log} from "util";
+import {StartPage} from "./Start"
+import {BoardPage} from "./Board"
+import {FinishPage} from "./Finish"
 
-const NEW_POKEMON = {
-    "abilities": [
-        "keen-eye",
-        "tangled-feet",
-        "big-pecks"
-    ],
-    "stats": {
-        "hp": 63,
-        "attack": 60,
-        "defense": 55,
-        "special-attack": 50,
-        "special-defense": 50,
-        "speed": 71
-    },
-    "type": "flying",
-    "img": "https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/17.png",
-    "name": "pidgeotto",
-    "base_experience": 122,
-    "height": 11,
-    "id": 17,
-    "values": {
-        "top": "A",
-        "right": 2,
-        "bottom": 7,
-        "left": 5
-    }
-}
-
-const getPokemons = (setCards: React.Dispatch<React.SetStateAction<[string, Pokemon][] | null>>) => {
-    database.ref('pokemons').once('value', (snapshot) => {
-        setCards(Object.entries(snapshot.val()))
-    })
-}
+import {PokemonContext} from "../../context/pokemonContext"
+import {Pokemon} from "../../utils/types";
 
 export const GamePage = () => {
-  const [cards, setCards] = useState<[string, Pokemon][] | null>(null)
-  const [changedPok, setChangedPok] = useState<[string, Pokemon] | null>(null)
-  const [newPokemon, setNewPokemon] = useState<{ Pokemon: Pokemon, key: string } | null>(null)
-  const history = useHistory()
-  
-  const handleClick = () => {
-    history.push('/')
-  }
+    const [selectedPokemons, setSelectedPokemons] = useState<[string, Pokemon][] | []>([])
+    console.log(selectedPokemons)
+    const match = useRouteMatch()
 
-  useEffect(() => {
-      getPokemons(setCards)
-  }, [])
-
-  useEffect(() => {
-      if (changedPok) {
-          const [key, item] = changedPok
-          database.ref(`pokemons/${key}`).set(item)
-      }
-      return () => {
-          setChangedPok(null)
-      }
-  }, [changedPok])
-
-   useEffect(() => {
-       if (newPokemon) {
-           database.ref('pokemons/' + newPokemon.key).set(newPokemon.Pokemon)
-               .then(() => setCards((prevState => {
-                   if (prevState) return [...prevState, [newPokemon.key, newPokemon.Pokemon]]
-                   return [[newPokemon.key, newPokemon.Pokemon]]
-               })))
-       }
-       return () => {
-           setNewPokemon(null)
-       }
-   }, [newPokemon])
-
-  const handleActive = (id: number, isActive: boolean) => {
-    setCards((prevState: [string, Pokemon][] | null ) => {
-        if (prevState) {
-            return ( [...prevState.map(item => {
-                    const [key, pokemon] = item
-                    if (pokemon.id === id) {
-                        const newPokemon = {
-                            ...pokemon,
-                            isActive: !isActive
-                        }
-                        const newItem: [string, Pokemon] = [key, newPokemon]
-                        setChangedPok(newItem)
-                        return newItem
-                    }
-                    return item
-                })]
-            )
-        }
-        return prevState
-    })
-  }
-
-  const handleAddPokemon = () => {
-    const newKey = database.ref().child('pokemons').push().key
-    if (newKey) {
-        setNewPokemon({
-            Pokemon: {
-                ...NEW_POKEMON,
-                id: Math.floor(Math.random() * 1000)
-            },
-            key: newKey
+    const handleSelected = (key: string, pokemon: Pokemon) => {
+        setSelectedPokemons(prevState => {
+            if (prevState) {
+                const exist = prevState.find((item) => item[0] === key)
+                if (exist) {
+                    return [...prevState.filter(item => item[0] !== key)]
+                } else {
+                    return [
+                        ...prevState,
+                        [key, pokemon]
+                    ]
+                }
+            }
+            return [[key, pokemon]]
         })
     }
-  }
 
-  return (
-    <div>
-        <button className={classes.btn} onClick={handleAddPokemon}>
-            Add New Pokemon
-        </button>
-      <div className={classes.flex}>
-        {
-          cards && cards.map(([key,item]) => (
-            <PokemonCard
-                key={key}
-                name={item.name}
-                img={item.img}
-                id={item.id}
-                type={item.type}
-                values={item.values}
-                isActive={item.isActive === true}
-                changeActive={handleActive}
-              />
-          ))
-        }
-      </div>
-      <button className={classes.btn} onClick={handleClick}>
-        End Game
-      </button>
-    </div>
-  )
-}
+    return (
+        <PokemonContext.Provider value={{
+            pokemons: selectedPokemons,
+            onSelected: handleSelected
+        }}>
+            <Switch>
+                <Route path={`${match.path}/`} exact>
+                    <StartPage />
+                </Route>
+                <Route path={`${match.path}/board`}>
+                    <BoardPage />
+                </Route>
+                <Route path={`${match.path}/finish`}>
+                    <FinishPage />
+                </Route>
+            </Switch>
+         </PokemonContext.Provider>
+    );
+};

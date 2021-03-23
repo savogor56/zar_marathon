@@ -1,0 +1,21 @@
+.btn {
+  padding: 10px;
+  border: 2px solid violet;
+  border-radius: 6px;
+  width: 50%;
+  background-color: violet;
+  margin: 10% 25%;
+}
+
+.flex {
+  display: grid;
+  grid-template-columns: auto auto auto;
+  grid-gap: 40px;
+}
+
+.card {
+  width: 100%;
+  max-width: 250px;
+  height: 300px;
+  cursor: pointer;
+}

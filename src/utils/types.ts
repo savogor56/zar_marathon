@@ -25,4 +25,5 @@ export interface Pokemon {
   id: number
   values: PokemonValues
   isActive?: boolean
+  isSelected?: boolean
 }

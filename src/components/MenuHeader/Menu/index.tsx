@@ -36,7 +36,7 @@ export const Menu:React.FC<Props> = ({isOpen, toggleOpen}) => {
         <ul>
           {
             MENU.map(item => (
-              <li onClick={toggleOpen}>
+              <li key={item.title} onClick={toggleOpen}>
                 <Link to={item.to}>
                   {item.title}
                 </Link>
