@@ -1,5 +1,6 @@
 import firebase from "firebase/app"
 import 'firebase/database'
+import {Pokemon} from "../utils/types";
 
 const firebaseConfig = {
     apiKey: "AIzaSyAYpaEzGNbFmxh8zKsZ31eUDKKOKUcMwvQ",
@@ -12,7 +13,42 @@ const firebaseConfig = {
 }
 
 firebase.initializeApp(firebaseConfig)
-export const fire = firebase
-export const database = firebase.database()
 
-export default database
+class Firebase {
+    fire: typeof firebase
+    database: firebase.database.Database
+
+    constructor() {
+        this.fire = firebase
+        this.database = firebase.database()
+    }
+
+    getPokemonsSocket = (cb: (pokemons: [string, Pokemon][]) => void) => {
+        this.database.ref('pokemons').on('value', snapshot => {
+            const data: [string, Pokemon][] = Object.entries(snapshot.val())
+            cb(data)
+        })
+    }
+
+    offPokemonsSocket = () => {
+        this.database.ref('pokemons').off()
+    }
+
+    getPokemonsOnce = async () => {
+        return await this.database.ref('pokemons').once('value').then(snapshot => {
+            const data: [string, Pokemon][] = Object.entries(snapshot.val())
+            return data
+        })
+    }
+
+    postPokemon = (key: string, pokemon: Pokemon) => {
+       return this.database.ref(`pokemons/${key}`).set(pokemon)
+    }
+
+    addPokemon = (data: Pokemon) => {
+        const newKey = this.database.ref().child('pokemons').push().key
+        this.database.ref(`pokemons/${newKey}`).set(data)
+    }
+}
+
+export default Firebase
