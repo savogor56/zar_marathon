@@ -1,8 +1,6 @@
 import classes from './style.module.css'
 import { PokemonValues } from './../../utils/types'
-import cardBackSide from './assets/card-back-side.jpg'
 import cn from 'classnames'
-import {useState} from "react";
 
 interface Props {
   id: number
@@ -11,7 +9,7 @@ interface Props {
   img: string
   name: string
   isActive: boolean
-  isSelected: boolean
+  isSelected?: boolean
   changeSelected?: () => void
   className: string
   minimize?: boolean

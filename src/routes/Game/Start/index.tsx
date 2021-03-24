@@ -2,12 +2,12 @@ import React, {useContext, useEffect, useState} from 'react'
 import { useHistory } from 'react-router'
 
 import {Pokemon} from "../../../utils/types";
-import {PokemonCard} from "../../../components/PokemonCard";
+import {PokemonCard} from "../../../components/PokemonCard"
 
 import {FireBaseContext} from "../../../context/firabaseContext"
 
 import classes from "./style.module.css"
-import {PokemonContext} from "../../../context/pokemonContext";
+import {PokemonContext} from "../../../context/pokemonContext"
 
 export const StartPage = () => {
     const firebase = useContext(FireBaseContext)
@@ -23,6 +23,7 @@ export const StartPage = () => {
         firebase?.getPokemonsSocket((pokemons) => {
             setPokemons(pokemons)
         })
+        return () => firebase?.offPokemonsSocket()
     }, [])
 
 
@@ -57,7 +58,7 @@ export const StartPage = () => {
             <button
                 className={classes.btn}
                 onClick={handleStart}
-                disabled={pokemonsContext !== null && pokemonsContext.pokemons.length < 3}
+                disabled={pokemonsContext !== null && pokemonsContext.pokemons.length < 5}
             >
                 Start
             </button>
@@ -74,7 +75,7 @@ export const StartPage = () => {
                             isActive={true}
                             isSelected={item.isSelected === true}
                             changeSelected={() => {
-                                if (pokemonsContext && pokemonsContext.pokemons.length < 3 || item.isSelected === true) {
+                                if (pokemonsContext && pokemonsContext.pokemons.length < 5 || item.isSelected === true) {
                                     handleSelected(item.id)
                                 }
                             }}

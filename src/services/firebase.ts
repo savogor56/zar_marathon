@@ -30,6 +30,10 @@ class Firebase {
         })
     }
 
+    offPokemonsSocket = () => {
+        this.database.ref('pokemons').off()
+    }
+
     getPokemonsOnce = async () => {
         return await this.database.ref('pokemons').once('value').then(snapshot => {
             const data: [string, Pokemon][] = Object.entries(snapshot.val())

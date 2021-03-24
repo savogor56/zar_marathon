@@ -20,7 +20,6 @@ export const BoardPage = () => {
                         type={item.type}
                         values={item.values}
                         isActive={true}
-                        isSelected={item.isSelected === true}
                         className={classes.card}
                         minimize={true}
                     />
