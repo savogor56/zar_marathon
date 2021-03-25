@@ -8,15 +8,16 @@ interface Props {
   type: string
   img: string
   name: string
-  isActive: boolean
+  isActive?: boolean
   isSelected?: boolean
   changeSelected?: () => void
-  className: string
+  className?: string
   minimize?: boolean
+  possession?: string
 }
 
 export const PokemonCard: React.FC<Props> = ({name, img, id, type, values,
-  isActive, changeSelected, className, minimize, isSelected }) => {
+  isActive, changeSelected, className, minimize, isSelected, possession }) => {
   const handleClick = () => {
       changeSelected && changeSelected()
   }
@@ -28,7 +29,7 @@ export const PokemonCard: React.FC<Props> = ({name, img, id, type, values,
       >
           <div className={classes.cardFront}>
               <div className={cn(classes.wrap, classes.front)}>
-                  <div className={cn(classes.pokemon, classes[type])}>
+                  <div className={cn(classes.pokemon, classes[type], possession && classes[possession])}>
                       <div className={classes.values}>
                           <div className={cn(classes.count, classes.top)}>{values.top}</div>
                           <div className={cn(classes.count, classes.right)}>{values.right}</div>

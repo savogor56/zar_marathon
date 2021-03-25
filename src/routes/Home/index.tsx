@@ -9,7 +9,7 @@ export const HomePage = () => {
 
   return (
     <>
-      <Header title="This is title" descr="This is Description!" />
+      <Header title="Pokemon Game" descr="Collectible card game" />
       <Layout title="Rules" urlBg={bgImage}>
         <p>
           In the game two players face off against one another, one side playing as "blue", the other as "red" on a 3x3 grid.
