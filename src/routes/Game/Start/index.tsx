@@ -15,10 +15,6 @@ export const StartPage = () => {
     const [pokemons, setPokemons] = useState<[string, Pokemon][] | null>(null)
     const history = useHistory()
 
-    const handleEnd = () => {
-        history.push('/')
-    }
-
     useEffect(() => {
         firebase?.getPokemonsSocket((pokemons) => {
             setPokemons(pokemons)
@@ -37,7 +33,7 @@ export const StartPage = () => {
                                 ...pokemon,
                                 isSelected: !pokemon.isSelected
                             }
-                            pokemonsContext && pokemonsContext.onSelected(key, newPokemon)
+
                             const newItem: [string, Pokemon] = [key, newPokemon]
                             return newItem
                         }
@@ -47,6 +43,11 @@ export const StartPage = () => {
             }
             return prevState
         })
+        const pokemon = pokemons?.find(item => item[1].id === id)
+        if (pokemon && pokemonsContext) {
+            const [key, item] = pokemon
+            pokemonsContext.onSelected(key, item)
+        }
     }
 
     const handleStart = () => {
@@ -84,9 +85,6 @@ export const StartPage = () => {
                     ))
                 }
             </div>
-            <button className={classes.btn} onClick={handleEnd}>
-                End Game
-            </button>
         </div>
     )
 }

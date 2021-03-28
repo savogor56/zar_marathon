@@ -26,4 +26,11 @@ export interface Pokemon {
   values: PokemonValues
   isActive?: boolean
   isSelected?: boolean
+  player?: number
+  possession?: string
+}
+
+export interface BoardCell {
+  position: number
+  card: Pokemon | null
 }
