@@ -1,11 +1,12 @@
 import classes from './style.module.css'
 
-import React, {useContext, useEffect, useState} from "react"
-import {PokemonContext} from "../../../context/pokemonContext"
+import React, {useEffect, useState} from "react"
 import {PokemonCard} from "../../../components/PokemonCard"
 import {BoardCell, Pokemon} from "../../../utils/types"
 import {useHistory} from "react-router"
 import {PlayerBoard} from "./component/PlayerBoard"
+import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {setWinner, onFinished, fetchPlayer2Pokemons, fetchBoardCells, updateBoardCells} from "../../../store/game"
 
 const counterWin = (board: BoardCell[], player1: Pokemon[], player2: Pokemon[]) => {
     let player1Count = player1.length
@@ -25,11 +26,9 @@ const counterWin = (board: BoardCell[], player1: Pokemon[], player2: Pokemon[]) 
 }
 
 export const BoardPage = () => {
-    const pokemonsContext = useContext(PokemonContext)
-    const pokemons: Pokemon[] | null = pokemonsContext && pokemonsContext.pokemons.length > 0
-        ? pokemonsContext.pokemons.map((item: [string, Pokemon]) => item[1])
-        : null
-    const [board, setBoard] = useState<BoardCell[] | undefined>()
+    const pokemons = useAppSelector(state => state.game.selectedPokemons.map(item => item[1]))
+    const {player2Cards, boardCells } = useAppSelector((state => state.game))
+    const dispatch = useAppDispatch()
     const [player1,setPlayer1] = useState<Pokemon[] | undefined>(() => pokemons?.map(item => ({
         ...item,
         possession: 'blue'
@@ -38,67 +37,52 @@ export const BoardPage = () => {
     const [choiceCard,setChoiceCard] = useState<Pokemon | null>(null)
     const [steps, setSteps] = useState(0)
     const [activePlayer, setActivePlayer] = useState(1)
+    const [updatedCell, setUpdatedCell] = useState<number | undefined>()
 
     const history = useHistory()
 
     useEffect(() => {
-        const fetchData = async () => {
-            const boardResponse = await fetch('https://reactmarathon-api.netlify.app/api/board')
-            const boardRequest = await boardResponse.json()
-            setBoard(boardRequest.data)
-
-            const player2Response = await fetch('https://reactmarathon-api.netlify.app/api/create-player')
-            const player2Request = await player2Response.json()
-            const player2 = player2Request.data.map((item: Pokemon) => ({
-                ...item,
-                possession: 'red'
-            }))
-            setPlayer2(player2)
-            return player2
-        }
-        fetchData().then((player2: Pokemon[]) => {
-            player1 && player2 && pokemonsContext?.onSetPlayersCards(player1, player2)
-        })
+        dispatch(fetchPlayer2Pokemons())
+        dispatch(fetchBoardCells())
     }, [])
 
     useEffect(() => {
-        if (steps === 9 && board && player1 && player2) {
-            const [count1, count2] = counterWin(board, player1, player2)
-            debugger
+        if (player2Cards) setPlayer2(player2Cards.map(item => ({
+            ...item,
+            possession: "red"
+        })))
+    }, [player2Cards])
+
+    useEffect(() => {
+        if (updatedCell && boardCells && choiceCard) {
+            dispatch(updateBoardCells(choiceCard, updatedCell, boardCells))
+            setUpdatedCell(undefined)
+            setSteps(prevState => prevState + 1)
+            setChoiceCard(null)
+        }
+    }, [updatedCell])
+
+    useEffect(() => {
+        if (steps === 9 && boardCells && player1 && player2) {
+            const [count1, count2] = counterWin(boardCells, player1, player2)
             if (count1 > count2) {
-                pokemonsContext?.onSetWinner(1)
+                dispatch(setWinner(1))
                 alert('win')
             } else if (count1 < count2) {
-                pokemonsContext?.onSetWinner(2)
+                dispatch(setWinner(2))
                 alert('LOSE')
             } else {
-                pokemonsContext?.onSetWinner(0)
+                dispatch(setWinner(0))
                 alert('DRAW')
             }
-            pokemonsContext?.onFinished(true)
+            dispatch(onFinished(true))
             history.push('/game/finish')
         }
     }, [steps])
 
     const handleClickBoardCell = async (position: number) => {
         if (choiceCard) {
-            const params = {
-                position,
-                card: choiceCard,
-                board
-            }
-
-            const res = await fetch('https://reactmarathon-api.netlify.app/api/players-turn', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                body: JSON.stringify(params),
-            })
-
-            const request = await res.json()
-
-
+            setUpdatedCell(position)
             if (choiceCard.player === 1) {
                 setPlayer1(prevState => prevState?.filter(item => item.id !== choiceCard.id))
             }
@@ -111,9 +95,6 @@ export const BoardPage = () => {
             } else {
                 setActivePlayer(1)
             }
-            setBoard(request.data)
-            setSteps(prevState => prevState + 1)
-            setChoiceCard(null)
         }
     }
 
@@ -134,7 +115,7 @@ export const BoardPage = () => {
             </div>
             <div className={classes.board}>
                 {
-                    board?.map(({position, card}) => (
+                    boardCells?.map(({position, card}) => (
                         <div
                             key={position}
                             className={classes.boardPlate}

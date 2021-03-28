@@ -1,26 +1,28 @@
-import React, {useContext, useEffect, useState} from 'react'
+import { useEffect, useState} from 'react'
 import { useHistory } from 'react-router'
 
 import {Pokemon} from "../../../utils/types";
 import {PokemonCard} from "../../../components/PokemonCard"
+import {Loader} from "../../../components/Loader"
 
-import {FireBaseContext} from "../../../context/firabaseContext"
+import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {fetchPokemons, onPokemonSelect} from "../../../store/game"
 
 import classes from "./style.module.css"
-import {PokemonContext} from "../../../context/pokemonContext"
 
 export const StartPage = () => {
-    const firebase = useContext(FireBaseContext)
-    const pokemonsContext = useContext(PokemonContext)
     const [pokemons, setPokemons] = useState<[string, Pokemon][] | null>(null)
+    const dispatch = useAppDispatch()
+    const {data, isFetching, selectedPokemons} = useAppSelector(state => state.game)
     const history = useHistory()
 
     useEffect(() => {
-        firebase?.getPokemonsSocket((pokemons) => {
-            setPokemons(pokemons)
-        })
-        return () => firebase?.offPokemonsSocket()
+        dispatch(fetchPokemons())
     }, [])
+
+    useEffect(() => {
+        if (data) setPokemons(data)
+    }, [data])
 
 
     const handleSelected = (id: number) => {
@@ -44,9 +46,8 @@ export const StartPage = () => {
             return prevState
         })
         const pokemon = pokemons?.find(item => item[1].id === id)
-        if (pokemon && pokemonsContext) {
-            const [key, item] = pokemon
-            pokemonsContext.onSelected(key, item)
+        if (pokemon) {
+            dispatch(onPokemonSelect(pokemon))
         }
     }
 
@@ -59,10 +60,11 @@ export const StartPage = () => {
             <button
                 className={classes.btn}
                 onClick={handleStart}
-                disabled={pokemonsContext !== null && pokemonsContext.pokemons.length < 5}
+                disabled={selectedPokemons.length < 5}
             >
                 Start
             </button>
+            {isFetching && <Loader/>}
             <div className={classes.flex}>
                 {
                     pokemons && pokemons.map(([key,item]) => (
@@ -76,7 +78,7 @@ export const StartPage = () => {
                             isActive={true}
                             isSelected={item.isSelected === true}
                             changeSelected={() => {
-                                if (pokemonsContext && pokemonsContext.pokemons.length < 5 || item.isSelected === true) {
+                                if ((selectedPokemons.length < 5) || item.isSelected === true) {
                                     handleSelected(item.id)
                                 }
                             }}

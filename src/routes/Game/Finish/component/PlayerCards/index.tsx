@@ -1,8 +1,8 @@
 import {PokemonCard} from "../../../../../components/PokemonCard"
 import classes from "./style.module.css"
-import React, {useContext, useState} from "react"
+import React, {useState} from "react"
 import {Pokemon} from "../../../../../utils/types"
-import {PokemonContext} from "../../../../../context/pokemonContext";
+import {useAppSelector} from "../../../../../store/hooks"
 
 interface Props {
     cards: Pokemon[]
@@ -11,23 +11,23 @@ interface Props {
 
 export const PlayerCards: React.FC<Props> = ({ cards, onChoice }) => {
     const [selected, setSelected] = useState<number | undefined>()
-    const pokemonContext = useContext(PokemonContext)
+    const winner = useAppSelector(state => state.game.winner)
 
     return (
         <>
             {
                 cards.map(item => (
                     <div
+                        key={item.id}
                         className={classes.card}
                         onClick={() => {
-                            if (pokemonContext?.winner === 1) {
+                            if (winner === 1) {
                                 setSelected(item.id)
                                 onChoice && onChoice(item)
                             }
                         }}
                     >
                         <PokemonCard
-                            key={item.id}
                             name={item.name}
                             img={item.img}
                             id={item.id}
