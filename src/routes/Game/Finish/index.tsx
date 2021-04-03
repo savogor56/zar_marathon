@@ -1,41 +1,45 @@
 import classes from "./style.module.css"
-import React, {useContext, useEffect, useState} from "react"
-import {PokemonContext} from "../../../context/pokemonContext"
+import React, { useEffect, useState} from "react"
 import {useHistory} from "react-router"
 import {PlayerCards} from "./component/PlayerCards"
 import {Pokemon} from "../../../utils/types"
-import {FireBaseContext} from "../../../context/firabaseContext"
+import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {addPokemon, onClearPokemons} from "../../../store/game";
 
 export const FinishPage = () => {
-    const pokemonContext = useContext(PokemonContext)
-    const firebase = useContext(FireBaseContext)
+    const { player2Cards, selectedPokemons } = useAppSelector(state => state.game)
+    const { isFinished } = useAppSelector(state => state.board)
+    const dispatch = useAppDispatch()
+    const player1 = selectedPokemons.map(item => item[1])
+    const player2 = player2Cards?.map(item => ({
+        ...item,
+        possession: 'red',
+        player: 2
+    }))
     const history = useHistory()
     const [choiceCard, setChoiceCard] = useState<Pokemon | undefined>()
-    const [addedPokemon, setAddedPokemon] = useState<Pokemon | null>(null)
+    const [isEnd, setIsEnd] = useState(false)
 
     useEffect(() => {
-        if (addedPokemon) {
-            firebase?.addPokemon(addedPokemon)
-            pokemonContext?.onClear()
-            history.push('/')
+        if (isEnd) {
+            if (choiceCard) {
+                dispatch(addPokemon(choiceCard))
+            }
+            dispatch(onClearPokemons())
+            history.push('/game')
         }
-    }, [addedPokemon, firebase])
+        return () => setIsEnd(false)
+    }, [isEnd])
 
     const handleEnd = () => {
-        if (choiceCard) {
-            setAddedPokemon(choiceCard)
-        }
-        if (pokemonContext?.winner !== 1) {
-            pokemonContext?.onClear()
-            history.push('/')
-        }
+        setIsEnd(true)
     }
 
     const handleChoice = (card: Pokemon) => {
        setChoiceCard(card)
     }
 
-    if (!pokemonContext?.isFinished) {
+    if (!isFinished) {
         history.replace('/game')
     }
 
@@ -43,16 +47,16 @@ export const FinishPage = () => {
         <div>
             <h1>Finish Page</h1>
             <div className={classes.flex}>
-                {pokemonContext?.player1 && <PlayerCards cards={pokemonContext.player1} />}
+                {player1 && <PlayerCards cards={player1} />}
             </div>
             <button className={classes.btn} onClick={handleEnd}>
                 End Game
             </button>
             <div className={classes.flex}>
-                {pokemonContext?.player2 &&
+                {player2 &&
                 <PlayerCards
                     onChoice={handleChoice}
-                    cards={pokemonContext.player2}
+                    cards={player2}
                 />}
             </div>
         </div>
