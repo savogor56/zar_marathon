@@ -6,7 +6,8 @@ import {BoardCell, Pokemon} from "../../../utils/types"
 import {useHistory} from "react-router"
 import {PlayerBoard} from "./component/PlayerBoard"
 import {useAppDispatch, useAppSelector} from "../../../store/hooks"
-import {setWinner, onFinished, fetchPlayer2Pokemons, fetchBoardCells, updateBoardCells} from "../../../store/game"
+import {setWinner, onFinished, fetchBoardCells, updateBoardCells} from "../../../store/board"
+import {fetchPlayer2Pokemons} from "../../../store/game"
 
 const counterWin = (board: BoardCell[], player1: Pokemon[], player2: Pokemon[]) => {
     let player1Count = player1.length
@@ -27,7 +28,8 @@ const counterWin = (board: BoardCell[], player1: Pokemon[], player2: Pokemon[]) 
 
 export const BoardPage = () => {
     const pokemons = useAppSelector(state => state.game.selectedPokemons.map(item => item[1]))
-    const {player2Cards, boardCells } = useAppSelector((state => state.game))
+    const { player2Cards } = useAppSelector((state => state.game))
+    const { boardCells } = useAppSelector((state => state.board))
     const dispatch = useAppDispatch()
     const [player1,setPlayer1] = useState<Pokemon[] | undefined>(() => pokemons?.map(item => ({
         ...item,

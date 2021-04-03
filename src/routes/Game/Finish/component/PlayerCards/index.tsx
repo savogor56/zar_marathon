@@ -11,7 +11,7 @@ interface Props {
 
 export const PlayerCards: React.FC<Props> = ({ cards, onChoice }) => {
     const [selected, setSelected] = useState<number | undefined>()
-    const winner = useAppSelector(state => state.game.winner)
+    const winner = useAppSelector(state => state.board.winner)
 
     return (
         <>

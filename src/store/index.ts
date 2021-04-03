@@ -1,8 +1,10 @@
 import {configureStore, combineReducers} from "@reduxjs/toolkit"
-import game from "./game";
+import game from "./game"
+import board from "./board"
 
 const rootReducer = combineReducers({
-    game
+    game,
+    board
 })
 
 const store = configureStore({

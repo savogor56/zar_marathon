@@ -4,10 +4,11 @@ import {useHistory} from "react-router"
 import {PlayerCards} from "./component/PlayerCards"
 import {Pokemon} from "../../../utils/types"
 import {useAppDispatch, useAppSelector} from "../../../store/hooks"
-import {addPokemon, onClear} from "../../../store/game";
+import {addPokemon, onClearPokemons} from "../../../store/game";
 
 export const FinishPage = () => {
-    const {player2Cards, selectedPokemons, isFinished} = useAppSelector(state => state.game)
+    const { player2Cards, selectedPokemons } = useAppSelector(state => state.game)
+    const { isFinished } = useAppSelector(state => state.board)
     const dispatch = useAppDispatch()
     const player1 = selectedPokemons.map(item => item[1])
     const player2 = player2Cards?.map(item => ({
@@ -24,7 +25,7 @@ export const FinishPage = () => {
             if (choiceCard) {
                 dispatch(addPokemon(choiceCard))
             }
-            dispatch(onClear())
+            dispatch(onClearPokemons())
             history.push('/game')
         }
         return () => setIsEnd(false)
