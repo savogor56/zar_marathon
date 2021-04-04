@@ -12,29 +12,39 @@ const game = createSlice({
         player2Cards: null as null | Pokemon[]
     },
     reducers: {
-        pokemonsIsFetching: state => {
-            state.isFetching = true
-        },
-        fetchPokemonsResolve: (state, {payload}: PayloadAction<[string, Pokemon][]>) => {
-            state.isFetching = false
-            state.data = payload
-        },
+        pokemonsIsFetching: state => ({
+            ...state,
+            isFetching: true
+        }),
+        fetchPokemonsResolve: (state, {payload}: PayloadAction<[string, Pokemon][]>) => ({
+            ...state,
+            isFetching: false,
+            data: payload
+        }),
         onPokemonSelect: (state, {payload}: PayloadAction<[string, Pokemon]>) => {
             const [key] = payload
             const exist = state.selectedPokemons.find(item => item[0] === key)
             if (exist) {
-               state.selectedPokemons = state.selectedPokemons.filter(item => item[0] !== key)
+               return ({
+                   ...state,
+                   selectedPokemons: state.selectedPokemons.filter(item => item[0] !== key)
+               })
             } else {
-                state.selectedPokemons.push(payload)
+                return ({
+                    ...state,
+                    selectedPokemons: [...state.selectedPokemons, payload]
+                })
             }
         },
-        setPlayer2Cards: (state, {payload}: PayloadAction<Pokemon[]>) => {
-            state.player2Cards = payload
-        },
-        onClearPokemons: state => {
-            state.player2Cards = null
-            state.selectedPokemons = []
-        }
+        setPlayer2Cards: (state, {payload}: PayloadAction<Pokemon[]>) => ({
+            ...state,
+            player2Cards: payload
+        }),
+        onClearPokemons: state => ({
+            ...state,
+            player2Cards: null,
+            selectedPokemons: []
+        })
     }
 })
 

@@ -46,7 +46,7 @@ export const BoardPage = () => {
     useEffect(() => {
         dispatch(fetchPlayer2Pokemons())
         dispatch(fetchBoardCells())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (player2Cards) setPlayer2(player2Cards.map(item => ({
@@ -62,7 +62,7 @@ export const BoardPage = () => {
             setSteps(prevState => prevState + 1)
             setChoiceCard(null)
         }
-    }, [updatedCell])
+    }, [updatedCell, boardCells, choiceCard, dispatch])
 
     useEffect(() => {
         if (steps === 9 && boardCells && player1 && player2) {
@@ -80,7 +80,7 @@ export const BoardPage = () => {
             dispatch(onFinished(true))
             history.push('/game/finish')
         }
-    }, [steps])
+    }, [steps, history, player1, player2, dispatch, boardCells])
 
     const handleClickBoardCell = async (position: number) => {
         if (choiceCard) {

@@ -1,5 +1,7 @@
-import { Redirect, Route, Switch, useRouteMatch, useLocation } from "react-router"
-import cn from 'classnames'
+import { Redirect, Route, Switch, useLocation } from "react-router"
+// @ts-ignore
+import { NotificationContainer } from "react-notifications"
+import cn from "classnames"
 
 import { MenuHeader } from "./components/MenuHeader"
 import { GamePage } from "./routes/Game"
@@ -9,16 +11,16 @@ import { AboutPage } from "./routes/About"
 import { ContactPage } from "./routes/Contact"
 import { NotFound } from "./routes/NotFound"
 
-import classes from './style.module.css'
-import {FireBaseContext} from "./context/firabaseContext";
-import Firebase from "./services/firebase";
+import classes from "./style.module.css"
+import "react-notifications/lib/notifications.css"
+import PrivateRoute from "./components/PrivateRoute"
 
 const App = () => {
   const location = useLocation()
   const isPadding = location.pathname === '/' || location.pathname === '/game/board'
   
   return (
-      <FireBaseContext.Provider value={Firebase}>
+      <>
         <Switch>
           <Route path="/404">
             <NotFound />
@@ -30,15 +32,15 @@ const App = () => {
                 {[classes.isHomePage]: isPadding}
                 )}>
                 <Switch>
-                  <Route exact path="/">
+                  <Route exact path="/" >
                     <HomePage />
                   </Route>
-                  <Route path="/game">
+                  <PrivateRoute path="/game">
                     <GamePage />
-                  </Route>
-                  <Route path="/about">
+                  </PrivateRoute>
+                  <PrivateRoute path="/about" >
                     <AboutPage />
-                  </Route>
+                  </PrivateRoute>
                   <Route path="/contact">
                     <ContactPage />
                   </Route>
@@ -51,7 +53,8 @@ const App = () => {
             </>
           </Route>
         </Switch>
-      </FireBaseContext.Provider>
+        <NotificationContainer />
+      </>
   )
 }
 

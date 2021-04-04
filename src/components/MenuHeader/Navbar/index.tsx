@@ -1,13 +1,15 @@
 import classes from './style.module.css'
 import cn from 'classnames'
+import {ReactComponent as LoginSvg} from "../../../assets/login.svg"
 
 interface Props {
   toggleOpen: () => void
+  onClickLogin: () => void
   isOpen: boolean | null
   bgActive?: boolean
 }
 
-export const Navbar:React.FC<Props> = ({toggleOpen, isOpen, bgActive}) => {
+export const Navbar:React.FC<Props> = ({toggleOpen, isOpen, bgActive, onClickLogin}) => {
   const handleClick = () => {
     toggleOpen()
   }
@@ -20,12 +22,19 @@ export const Navbar:React.FC<Props> = ({toggleOpen, isOpen, bgActive}) => {
         <p className={classes.brand}>
           LOGO
         </p>
-         {/*eslint-disable-next-line jsx-a11y/anchor-is-valid*/}
-        <div
-          className={cn(classes.menuButton, {[classes.active]: isOpen})} 
-          onClick={handleClick}
-        >
-          <span />
+        <div className={classes.loginAndMenu}>
+          <div
+            className={classes.loginWrap}
+            onClick={onClickLogin}
+          >
+            <LoginSvg />
+          </div>
+          <div
+              className={cn(classes.menuButton, {[classes.active]: isOpen})}
+              onClick={handleClick}
+          >
+            <span />
+          </div>
         </div>
       </div>
     </nav>

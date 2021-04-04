@@ -18,6 +18,7 @@ export const PlayerBoard: React.FC<Props> = ({cards, onClickCard, player, active
             {
                 cards.map(item => (
                     <div
+                        key={item.id}
                         className={cn(classes.cardBoard,{
                             [classes.selected]: isSelected === item.id
                         })}
@@ -32,7 +33,6 @@ export const PlayerBoard: React.FC<Props> = ({cards, onClickCard, player, active
                         }}
                     >
                     <PokemonCard
-                        key={item.id}
                         name={item.name}
                         img={item.img}
                         id={item.id}

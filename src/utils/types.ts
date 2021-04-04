@@ -34,3 +34,8 @@ export interface BoardCell {
   position: number
   card: Pokemon | null
 }
+
+export interface LoginFormData {
+  email: string
+  password: string
+}

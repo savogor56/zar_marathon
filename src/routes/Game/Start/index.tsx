@@ -18,7 +18,7 @@ export const StartPage = () => {
 
     useEffect(() => {
         dispatch(fetchPokemons())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (data) setPokemons(data)
@@ -56,7 +56,7 @@ export const StartPage = () => {
     }
 
     return (
-        <div>
+        <div className={classes.root}>
             <button
                 className={classes.btn}
                 onClick={handleStart}
@@ -65,25 +65,26 @@ export const StartPage = () => {
                 Start
             </button>
             {isFetching && <Loader/>}
-            <div className={classes.flex}>
+            <div className={classes.cardsGrid}>
                 {
                     pokemons && pokemons.map(([key,item]) => (
-                        <PokemonCard
-                            key={key}
-                            name={item.name}
-                            img={item.img}
-                            id={item.id}
-                            type={item.type}
-                            values={item.values}
-                            isActive={true}
-                            isSelected={item.isSelected === true}
-                            changeSelected={() => {
-                                if ((selectedPokemons.length < 5) || item.isSelected === true) {
-                                    handleSelected(item.id)
-                                }
-                            }}
-                            className={classes.card}
-                        />
+                        <div className={classes.cardWrap} key={key}>
+                            <PokemonCard
+                                name={item.name}
+                                img={item.img}
+                                id={item.id}
+                                type={item.type}
+                                values={item.values}
+                                isActive={true}
+                                isSelected={item.isSelected === true}
+                                changeSelected={() => {
+                                    if ((selectedPokemons.length < 5) || item.isSelected === true) {
+                                        handleSelected(item.id)
+                                    }
+                                }}
+                                className={classes.card}
+                            />
+                        </div>
                     ))
                 }
             </div>
