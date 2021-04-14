@@ -1,10 +1,12 @@
 import {configureStore, combineReducers} from "@reduxjs/toolkit"
 import game from "./game"
 import board from "./board"
+import user from "./user";
 
 const rootReducer = combineReducers({
     game,
-    board
+    board,
+    user
 })
 
 const store = configureStore({

@@ -1,6 +1,7 @@
 import classes from './style.module.css'
 import cn from 'classnames'
 import { Link } from 'react-router-dom'
+import React from "react"
 
 interface Props {
   isOpen: boolean | null
@@ -23,6 +24,9 @@ const MENU = [
   {
     title: 'CONTACT',
     to: '/contact'
+  },{
+    title: 'PROFILE',
+    to: '/user'
   },
 ]
 

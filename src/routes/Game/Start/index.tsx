@@ -5,7 +5,7 @@ import {Pokemon} from "../../../utils/types";
 import {PokemonCard} from "../../../components/PokemonCard"
 import {Loader} from "../../../components/Loader"
 
-import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks"
 import {fetchPokemons, onPokemonSelect} from "../../../store/game"
 
 import classes from "./style.module.css"

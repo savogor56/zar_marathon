@@ -45,9 +45,13 @@ class Firebase {
        return this.database.ref(`pokemons/${key}`).set(pokemon)
     }
 
-    addPokemon = (data: Pokemon) => {
-        const newKey = this.database.ref().child('pokemons').push().key
-        this.database.ref(`pokemons/${newKey}`).set(data)
+    addPokemon = (data: Pokemon, localId: string) => {
+        const newKey = this.database.ref().child(`${localId}/pokemons`).push().key
+        this.database.ref(`${localId}/pokemons/${newKey}`).set(data)
+        /*
+        После добавления покемона и редиректа, запрос на получение покемонов
+        возвращает покемонов без нового, хотя все запросы отрабатывают, не успел разобраться
+        */
     }
 }
 
