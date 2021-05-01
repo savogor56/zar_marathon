@@ -5,7 +5,7 @@ import {PokemonCard} from "../../../components/PokemonCard"
 import {BoardCell, Pokemon} from "../../../utils/types"
 import {useHistory} from "react-router"
 import {PlayerBoard} from "./component/PlayerBoard"
-import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks"
 import {setWinner, onFinished, fetchBoardCells, updateBoardCells} from "../../../store/board"
 import {fetchPlayer2Pokemons} from "../../../store/game"
 
@@ -46,7 +46,7 @@ export const BoardPage = () => {
     useEffect(() => {
         dispatch(fetchPlayer2Pokemons())
         dispatch(fetchBoardCells())
-    }, [])
+    }, [dispatch])
 
     useEffect(() => {
         if (player2Cards) setPlayer2(player2Cards.map(item => ({
@@ -62,7 +62,7 @@ export const BoardPage = () => {
             setSteps(prevState => prevState + 1)
             setChoiceCard(null)
         }
-    }, [updatedCell])
+    }, [updatedCell, boardCells, choiceCard, dispatch])
 
     useEffect(() => {
         if (steps === 9 && boardCells && player1 && player2) {
@@ -71,7 +71,7 @@ export const BoardPage = () => {
                 dispatch(setWinner(1))
                 alert('win')
             } else if (count1 < count2) {
-                dispatch(setWinner(2))
+                dispatch(setWinner(1))
                 alert('LOSE')
             } else {
                 dispatch(setWinner(0))
@@ -80,7 +80,7 @@ export const BoardPage = () => {
             dispatch(onFinished(true))
             history.push('/game/finish')
         }
-    }, [steps])
+    }, [steps, history, player1, player2, dispatch, boardCells])
 
     const handleClickBoardCell = async (position: number) => {
         if (choiceCard) {

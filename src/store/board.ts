@@ -10,20 +10,24 @@ const board = createSlice({
         boardCells: null as BoardCell[] | null
     },
     reducers: {
-        onFinished: (state, {payload}: PayloadAction<boolean>) => {
-            state.isFinished = payload
-        },
-        setWinner: (state, {payload}: PayloadAction<number>) => {
-            state.winner = payload
-        },
-        setBoardCells: (state, {payload}: PayloadAction<BoardCell[]>) => {
-            state.boardCells = payload
-        },
-        onClearBoard: state => {
-            state.winner = 0
-            state.isFinished = false
-            state.boardCells = null
-        }
+        onFinished: (state, {payload}: PayloadAction<boolean>) => ({
+            ...state,
+            isFinished: payload
+        }),
+        setWinner: (state, {payload}: PayloadAction<number>) => ({
+            ...state,
+            winner: payload
+        }),
+        setBoardCells: (state, {payload}: PayloadAction<BoardCell[]>) => ({
+            ...state,
+            boardCells: payload
+        }),
+        onClearBoard: state => ({
+            ...state,
+            winner: 0,
+            isFinished: false,
+            boardCells: null
+        })
     }
 })
 

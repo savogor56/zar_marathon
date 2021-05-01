@@ -1,9 +1,7 @@
-import { Footer } from '../../components/Footer'
 import { Header } from '../../components/Header'
 import { Layout } from '../../components/Layout'
 
 import bgImage from '../../assets/bg1.jpg'
-import {Loader} from "../../components/Loader";
 
 
 export const HomePage = () => {

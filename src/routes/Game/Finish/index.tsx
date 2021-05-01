@@ -3,7 +3,7 @@ import React, { useEffect, useState} from "react"
 import {useHistory} from "react-router"
 import {PlayerCards} from "./component/PlayerCards"
 import {Pokemon} from "../../../utils/types"
-import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks"
 import {addPokemon, onClearPokemons} from "../../../store/game";
 
 export const FinishPage = () => {
@@ -29,7 +29,7 @@ export const FinishPage = () => {
             history.push('/game')
         }
         return () => setIsEnd(false)
-    }, [isEnd])
+    }, [isEnd, dispatch, choiceCard, history])
 
     const handleEnd = () => {
         setIsEnd(true)
@@ -44,15 +44,17 @@ export const FinishPage = () => {
     }
 
     return(
-        <div>
-            <h1>Finish Page</h1>
-            <div className={classes.flex}>
+        <div className={classes.root}>
+            <h1 className={classes.title}>Finish Page</h1>
+            <div className={classes.cardsGrid}>
                 {player1 && <PlayerCards cards={player1} />}
             </div>
-            <button className={classes.btn} onClick={handleEnd}>
-                End Game
-            </button>
-            <div className={classes.flex}>
+            <div className={classes.btnWrap}>
+                <button onClick={handleEnd}>
+                    End Game
+                </button>
+            </div>
+            <div className={classes.cardsGrid}>
                 {player2 &&
                 <PlayerCards
                     onChoice={handleChoice}
