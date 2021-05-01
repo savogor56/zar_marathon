@@ -7,8 +7,8 @@ import { Navbar } from './Navbar'
 import {Modal} from "../Modal"
 import {LoginForm} from "../LoginForm"
 import {LoginFormData} from "../../utils/types"
-import {useAppDispatch} from "../../store/hooks"
-import {signIn, signUp} from "../../store/auth"
+import {useAppDispatch} from "../../utils/hooks"
+import {LoginOrRegister} from "../../store/auth"
 
 interface Props {
   bgActive?: boolean
@@ -23,16 +23,6 @@ export const MenuHeader:React.FC<Props> = ({ bgActive }) => {
   const [isSignUp, setIsSignUp ] = useState(true)
   const dispatch = useAppDispatch()
 
-  useEffect(() => {
-      if (loginData) {
-         if (isSignUp) {
-             dispatch(signUp(loginData))
-         } else {
-             dispatch(signIn(loginData))
-         }
-      }
-  }, [loginData, isSignUp, dispatch])
-
   const handleClear = () => {
       setPassword('')
       setEmail('')
@@ -42,7 +32,7 @@ export const MenuHeader:React.FC<Props> = ({ bgActive }) => {
     setOpen(prevState => !prevState)
   }
 
-  const handleCLickLogin = () => {
+  const handleClickLogin = () => {
       setOpenModal(prevState => !prevState)
       handleClear()
   }
@@ -51,6 +41,18 @@ export const MenuHeader:React.FC<Props> = ({ bgActive }) => {
       setLoginData(values)
   }
 
+    useEffect(() => {
+        const auth = async () => {
+            if (loginData) {
+                const result = await dispatch(LoginOrRegister(isSignUp, loginData))
+                if (result) handleClickLogin()
+                setLoginData(null)
+            }
+        }
+
+        auth()
+    }, [loginData, isSignUp, dispatch])
+
   return (
     <>
         <Menu toggleOpen={handleMenuOpen} isOpen={isOpen} />
@@ -58,9 +60,9 @@ export const MenuHeader:React.FC<Props> = ({ bgActive }) => {
             toggleOpen={handleMenuOpen}
             isOpen={isOpen}
             bgActive={bgActive}
-            onClickLogin={handleCLickLogin}
+            onClickLogin={handleClickLogin}
         />
-        <Modal isOpen={isOpenModal} onClose={handleCLickLogin} title={"Log in"}>
+        <Modal isOpen={isOpenModal} onClose={handleClickLogin} title={"Log in"}>
             <LoginForm
                 onSubmit={handleSubmitLoginForm}
                 onClear={handleClear}

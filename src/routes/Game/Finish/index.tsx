@@ -3,7 +3,7 @@ import React, { useEffect, useState} from "react"
 import {useHistory} from "react-router"
 import {PlayerCards} from "./component/PlayerCards"
 import {Pokemon} from "../../../utils/types"
-import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks"
 import {addPokemon, onClearPokemons} from "../../../store/game";
 
 export const FinishPage = () => {

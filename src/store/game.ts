@@ -1,7 +1,8 @@
 import {createSlice, PayloadAction} from "@reduxjs/toolkit"
 import {Pokemon} from "../utils/types";
-import {AppDispatch} from "./index";
+import {AppDispatch, RootState} from "./index";
 import firebase from "../services/firebase";
+import {selectLocalID} from "../utils/selectors";
 
 const game = createSlice({
     name: 'game',
@@ -53,10 +54,14 @@ export default game.reducer
 export const {pokemonsIsFetching, fetchPokemonsResolve,
     onPokemonSelect, onClearPokemons, setPlayer2Cards} = game.actions
 
-export const fetchPokemons = () => async (dispatch: AppDispatch) => {
+export const fetchPokemons = () => async (dispatch: AppDispatch, getState: () => RootState) => {
+    const localId = selectLocalID(getState())
     dispatch(pokemonsIsFetching())
-    const data = await firebase.getPokemonsOnce()
-    dispatch(fetchPokemonsResolve(data))
+    const data = await fetch(`https://pokemon-game-93771-default-rtdb.firebaseio.com/${localId}/pokemons.json`)
+        .then(res => res.json())
+    console.log(data)
+    dispatch(fetchPokemonsResolve(Object.entries(data)))
+
 }
 
 export const fetchPlayer2Pokemons = () => async (dispatch: AppDispatch) => {
@@ -66,6 +71,7 @@ export const fetchPlayer2Pokemons = () => async (dispatch: AppDispatch) => {
     dispatch(setPlayer2Cards(player2))
 }
 
-export const addPokemon = (pokemon: Pokemon) => async () => {
-    await firebase.addPokemon(pokemon)
+export const addPokemon = (pokemon: Pokemon) => async (dispatch: AppDispatch, getState: () => RootState) => {
+    const localId = selectLocalID(getState())
+    if (localId) await firebase.addPokemon(pokemon, localId)
 }

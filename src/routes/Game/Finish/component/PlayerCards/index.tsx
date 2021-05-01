@@ -2,7 +2,7 @@ import {PokemonCard} from "../../../../../components/PokemonCard"
 import classes from "./style.module.css"
 import React, {useState} from "react"
 import {Pokemon} from "../../../../../utils/types"
-import {useAppSelector} from "../../../../../store/hooks"
+import {useAppSelector} from "../../../../../utils/hooks"
 
 interface Props {
     cards: Pokemon[]

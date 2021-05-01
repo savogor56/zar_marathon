@@ -5,7 +5,7 @@ import {PokemonCard} from "../../../components/PokemonCard"
 import {BoardCell, Pokemon} from "../../../utils/types"
 import {useHistory} from "react-router"
 import {PlayerBoard} from "./component/PlayerBoard"
-import {useAppDispatch, useAppSelector} from "../../../store/hooks"
+import {useAppDispatch, useAppSelector} from "../../../utils/hooks"
 import {setWinner, onFinished, fetchBoardCells, updateBoardCells} from "../../../store/board"
 import {fetchPlayer2Pokemons} from "../../../store/game"
 
@@ -71,7 +71,7 @@ export const BoardPage = () => {
                 dispatch(setWinner(1))
                 alert('win')
             } else if (count1 < count2) {
-                dispatch(setWinner(2))
+                dispatch(setWinner(1))
                 alert('LOSE')
             } else {
                 dispatch(setWinner(0))

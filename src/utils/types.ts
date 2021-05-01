@@ -39,3 +39,23 @@ export interface LoginFormData {
   email: string
   password: string
 }
+
+export interface userInfo {
+  email: string
+  federatedId: string
+  providerId: string
+  rawId: string
+}
+
+export interface userData {
+  createdAt: string
+  email: string
+  emailVerified: boolean
+  lastLoginAt: string
+  lastRefreshAt: string
+  localId: string
+  passwordHash: string
+  passwordUpdatedAt: bigint
+  providerUserInfo: userInfo[]
+  validSince: string
+}
